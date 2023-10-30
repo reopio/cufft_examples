@@ -60,21 +60,20 @@ int main(){
     ///////////////// end of rest 2 dims parameter ////////////
 
 
-    cufftComplex *data_g,*tmp_data_g;
+    cufftComplex *data_g;
     cudaMalloc((void**)&data_g,LEN*sizeof(cufftComplex));
-    cudaMalloc((void**)&tmp_data_g,LEN*sizeof(cufftComplex));
     cudaMemcpy(data_g,data_h,LEN*sizeof(cufftComplex),cudaMemcpyHostToDevice);
 
     cufftPlanMany(&plan1,rank1,n1,inembed1,istride1,idist1,onembed1,ostride1,odist1,CUFFT_C2C,batch1); // first fft of two dims of 4 dims
     cufftPlanMany(&plan2,rank2,n2,inembed2,istride2,idist2,onembed2,ostride2,odist2,CUFFT_C2C,batch2); // rest fft of two dims of 4 dims
-    cufftExecC2C(plan1,data_g,tmp_data_g,CUFFT_FORWARD);
-    cufftExecC2C(plan2,tmp_data_g,data_g,CUFFT_FORWARD);
+    cufftExecC2C(plan1,data_g,data_g,CUFFT_FORWARD);
+    cufftExecC2C(plan2,data_g,data_g,CUFFT_FORWARD);
     cudaDeviceSynchronize();
 
     //cudaMemcpy(result_h,data_g,LEN*sizeof(cufftComplex),cudaMemcpyDeviceToHost);
 
-    cufftExecC2C(plan1,data_g,tmp_data_g,CUFFT_INVERSE);
-    cufftExecC2C(plan2,tmp_data_g,data_g,CUFFT_INVERSE);
+    cufftExecC2C(plan1,data_g,data_g,CUFFT_INVERSE);
+    cufftExecC2C(plan2,data_g,data_g,CUFFT_INVERSE);
     cudaDeviceSynchronize();
 
     cudaMemcpy(result_h,data_g,LEN*sizeof(cufftComplex),cudaMemcpyDeviceToHost);
@@ -85,7 +84,11 @@ int main(){
     printf("data[%d]:%.8f\n",index,data_h[index].x);
     printf("result[%d]:%.8f\n",index,result_h[index].x/LEN);
 
-
+    cufftDestroy(plan1);
+    cufftDestroy(plan2);
+    cudaFree(data_g);
+    free(data_h);
+    free(result_h);
 
     return 0;
 }
