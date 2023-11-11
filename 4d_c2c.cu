@@ -30,33 +30,33 @@ int main(){
     ///////////////// cufftPlanMany first 2 dims parameter ////////////
     cufftHandle plan1;
     //==========input===========//
-    int n1[2] = {N,N};         // shape of each batch
-    int rank1 = 2;             // dims of each batch
+    int n1[2] = {N,N};           // shape of each batch
+    int rank1 = 2;               // dims of each batch
     int inembed1[N] = {N,N,N,N}; // main array dims
-    int istride1 = 1;            // distance between two batches(col)
-    int idist1 = N*N;            // distance between two batches(row)
+    int istride1 = 1;            // distance between two batches(row)
+    int idist1 = N*N;            // distance between two batches(col)
 
     //==========output==========//
     int onembed1[N] = {N,N,N,N}; // main array dims
-    int ostride1 = 1;            // distance between two batches(col)
-    int odist1 = N*N;            // distance between two batches(row)
-    int batch1 = N*N;            // nums of separated fft to para
-    ///////////////// end of rest 2 dims parameter ////////////
+    int ostride1 = 1;            // distance between two batches(row)
+    int odist1 = N*N;            // distance between two batches(col)
+    int batch1 = N*N;            // nums of separated fft to parallel
+    ///////////////// end of first 2 dims parameter ////////////
 
-        ///////////////// cufftPlanMany first 2 dims parameter ////////////
+        ///////////////// cufftPlanMany rest 2 dims parameter ////////////
     cufftHandle plan2;
     //==========input===========//
-    int n2[2] = {N,N};         // shape of each batch
-    int rank2 = 2;             // dims of each batch
+    int n2[2] = {N,N};           // shape of each batch
+    int rank2 = 2;               // dims of each batch
     int inembed2[N] = {N,N,N,N}; // main array dims
-    int istride2 = N*N;          // distance between two batches(col)
-    int idist2 = 1;              // distance between two batches(row)
+    int istride2 = N*N;          // distance between two batches(row)
+    int idist2 = 1;              // distance between two batches(col)
 
     //==========output===========//
     int onembed2[N] = {N,N,N,N}; // main array dims
-    int ostride2 = N*N;          // distance between two batches(col)
-    int odist2 = 1;              // distance between two batches(row)
-    int batch2 = N*N;            // nums of separated fft to para
+    int ostride2 = N*N;          // distance between two batches(row)
+    int odist2 = 1;              // distance between two batches(col)
+    int batch2 = N*N;            // nums of separated fft to parallel
     ///////////////// end of rest 2 dims parameter ////////////
 
 
